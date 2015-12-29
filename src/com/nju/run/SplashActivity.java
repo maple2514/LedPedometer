@@ -1,3 +1,14 @@
+/**
+ *---------------------------------------------------
+ * é¡¹ç›®åç§°ï¼š LedPedometer
+ * Copyright: Â© 2015 Sun Quan,Computer Science,NJU University 
+ * @author Sun Quan
+ * @version 1.0
+ * @date 2015å¹´12æœˆ29æ—¥ ä¸‹åˆ8:40:57
+ * @since JDK 1.7.0_67
+ * SplashActivity.java 
+ *----------------------------------------------------
+ */
 package com.nju.run;
 
 import java.io.File;
@@ -46,15 +57,15 @@ public class SplashActivity extends Activity {
 	protected static final int URL_ERROR = 2;
 	protected static final int NETWORK_ERROR = 3;
 	protected static final int JOSN_ERROR = 4;
-	//ÅäÖÃÎÄ¼ş
+	//é…ç½®æ–‡ä»¶
     private SharedPreferences sp;
-    //°æ±¾ĞÅÏ¢
+    //ç‰ˆæœ¬textView
 	private TextView tv_splash_version;
-	//¸üĞÂĞÅÏ¢
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	private TextView tv_update_info;
-	//°æ±¾
+	//ç‰ˆæœ¬å·
 	protected String Version;
-	//×îĞÂ°æ±¾ÃèÊöĞÅÏ¢
+	//æè¿°ä¿¡æ¯
 	protected String Description;
 	protected String Apkurl;
 	protected Handler handler=new Handler(){
@@ -65,7 +76,7 @@ public class SplashActivity extends Activity {
 			super.handleMessage(msg);
 			switch (msg.what) {
 			case SHOW_UPDATE_DIALOG:		
-				Log.i(TAG, "ÏÔÊ¾Éı¼¶¶Ô»°¿ò");
+				Log.i(TAG, "æ˜¾ç¤ºå‡çº§çš„å¯¹è¯æ¡†");
 				showUpdateDialog();
 				break;
 			case ENTER_HOME:	
@@ -74,15 +85,15 @@ public class SplashActivity extends Activity {
 				break;
 			case URL_ERROR:		
 				enterHome();
-				Toast.makeText(getApplicationContext(), "URL´íÎó", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "URLé”™è¯¯", Toast.LENGTH_SHORT).show();
 				break;
 			case NETWORK_ERROR:		
 				enterHome();
-				Toast.makeText(getApplicationContext(), "ÍøÂç´íÎó", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "ç½‘ç»œå¼‚å¸¸", Toast.LENGTH_SHORT).show();
 				break;
 			case JOSN_ERROR:		
 				enterHome();
-				Toast.makeText(getApplicationContext(), "JSON½âÎö´íÎó", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "JSONè§£æå‡ºé”™", Toast.LENGTH_SHORT).show();
 				break;
 			
 
@@ -99,15 +110,15 @@ public class SplashActivity extends Activity {
         
         sp = getSharedPreferences("config", MODE_PRIVATE);
         tv_splash_version= (TextView) findViewById(R.id.tv_splash_version);
-		tv_splash_version.setText("°æ±¾ºÅ£º"+getVersionName());
+		tv_splash_version.setText("ç‰ˆæœ¬å·"+getVersionName());
 		tv_update_info = (TextView) findViewById(R.id.tv_update_info);
 		boolean update = sp.getBoolean("update", false);
 		
 		if(update){
-			//¼ì²éÉı¼¶
+			//ï¿½ï¿½ï¿½ï¿½ï¿½
 			checkUpdate();
 		}else{
-			//×Ô¶¯Éı¼¶ÒÑ¾­¹Ø±Õ
+			//ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½Ø±ï¿½
 			handler.postDelayed(new Runnable() {
 				
 				@Override
@@ -133,9 +144,9 @@ public class SplashActivity extends Activity {
 	protected void showUpdateDialog() {
 		// TODO Auto-generated method stub
 		AlertDialog.Builder builder=new Builder(this);
-		builder.setTitle("ÌáÊ¾Éı¼¶"); 
+		builder.setTitle("æç¤ºå‡çº§"); 
 		builder.setMessage(Description);
-//		builder.setCancelable(false);//Ç¿ÖÆÉı¼¶
+//		builder.setCancelable(false);//Ç¿ï¿½ï¿½ï¿½ï¿½
 		builder.setOnCancelListener(new OnCancelListener() {
 			
 			@Override
@@ -145,14 +156,14 @@ public class SplashActivity extends Activity {
 				dialog.dismiss();
 			}
 		});
-		builder.setPositiveButton("Á¢¼´Éı¼¶", new OnClickListener() {
+		builder.setPositiveButton("ç«‹åˆ»å‡çº§", new OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
-				//ÏÂÔØAPK²¢ÇÒ°²×°
+				//ï¿½ï¿½ï¿½ï¿½APKï¿½ï¿½ï¿½Ò°ï¿½×°
 				if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-					//´æÔÚSDK
+					//ï¿½ï¿½ï¿½ï¿½SDK
 					//affinal
 					FinalHttp finalHttp = new FinalHttp();
 					finalHttp.download(Apkurl, Environment.getExternalStorageDirectory().getAbsolutePath()+"/mobilesafe2.0.apk", new AjaxCallBack<File>() {
@@ -162,7 +173,7 @@ public class SplashActivity extends Activity {
 								String strMsg) {
 							// TODO Auto-generated method stub
 							t.printStackTrace();
-							Toast.makeText(getApplicationContext(), "ÏÂÔØÊ§°Ü", 0);
+							Toast.makeText(getApplicationContext(), "ä¸‹è½½å¤±è´¥", 0);
 							super.onFailure(t, errorNo, strMsg);
 							
 						}
@@ -173,7 +184,7 @@ public class SplashActivity extends Activity {
 							super.onLoading(count, current);
 							tv_update_info.setVisibility(View.VISIBLE);
 							int progress = (int) (current*100/count);
-							tv_update_info.setText("ÏÂÔØ½ø¶È£º"+progress+"%");
+							tv_update_info.setText("ä¸‹è½½è¿›åº¦ï¼š"+progress+"%");
 						}
 
 						@Override
@@ -194,11 +205,11 @@ public class SplashActivity extends Activity {
 						
 					});
 				}else{
-					Toast.makeText(getApplicationContext(), "Ã»ÓĞsdcard, Çë°²×°  ÔÙÊÔ",Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "æ²¡æœ‰sdcardï¼Œè¯·å®‰è£…ä¸Šåœ¨è¯•",Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
-		builder.setNegativeButton("ÏÂ´ÎÔÙËµ", new OnClickListener() {
+		builder.setNegativeButton("ä¸‹æ¬¡å†è¯´", new OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -211,7 +222,7 @@ public class SplashActivity extends Activity {
 	}
 
 	/**
-	 * ¼ì²éÊÇ·ñÓĞ¸üĞÂ
+	 * ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ğ¸ï¿½ï¿½ï¿½
 	 */
 	private void checkUpdate() {
 		// TODO Auto-generated method stub
@@ -222,7 +233,7 @@ public class SplashActivity extends Activity {
 				Message mes = Message.obtain();
 				long startTime = System.currentTimeMillis();
 				try {
-					//¸üĞÂÁ´½ÓÍøÕ¾
+					//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¾
 					URL url = new URL(getString(R.string.server_url));
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.setRequestMethod("GET");
@@ -230,19 +241,19 @@ public class SplashActivity extends Activity {
 					int code=conn.getResponseCode();
 					if(code==200){
 						InputStream is = conn.getInputStream();
-						//°ÑÁ÷×ª»»Îªstring
+						//ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½Îªstring
 						String result = StreamTools.readFromStream(is);
 						Log.i(TAG, result);
-						//json½âÎö
+						//jsonï¿½ï¿½ï¿½ï¿½
 						JSONObject obj=new JSONObject(result);
 						Version = (String) obj.get("version");
 						Description = (String) obj.get("description");
 						Apkurl = (String) obj.get("apkurl");
 						if(getVersionName().equals(Version)){
-							//°æ±¾Ò»ÖÂ£¬½øÈëÖ÷Ò³Ãæ
+							//ï¿½æ±¾Ò»ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò³ï¿½ï¿½
 							mes.what = ENTER_HOME;
 						}else{
-							//ÓĞĞÂ°æ±¾£¬µ¯³öÉı¼¶¶Ô»°¿ò
+							//ï¿½ï¿½ï¿½Â°æ±¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô»ï¿½ï¿½ï¿½
 							mes.what = SHOW_UPDATE_DIALOG;
 						}
 					}
@@ -276,7 +287,7 @@ public class SplashActivity extends Activity {
 	}
 
 	/**
-	 * »ñÈ¡°æ±¾ºÅ
+	 * ï¿½ï¿½È¡ï¿½æ±¾ï¿½ï¿½
 	 */
 	private String getVersionName() {
 		// TODO Auto-generated method stub

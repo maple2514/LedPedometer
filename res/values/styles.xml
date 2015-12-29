@@ -16,5 +16,27 @@
    <!--  <style name="AppTheme" parent="AppBaseTheme">
         All customizations that are NOT specific to a particular API-level can go here.
     </style> -->
-
+   <style name = "ButtonStyle">
+        <item name="android:layout_marginLeft">16dp</item>
+	    <item name="android:layout_marginRight">16dp</item>
+	    <item name="android:layout_marginTop">16dp</item>
+	    <item name="android:paddingBottom">8dp</item>
+	    <item name="android:paddingTop">8dp</item>
+	    <item name="android:gravity">center</item>
+	    <item name="android:textSize">14sp</item>
+   </style>
+	<style name = "EditTextStyle">
+	    <item name="android:layout_height">40dp</item>
+	    <item name="android:layout_width">match_parent</item>
+	    <item name="android:layout_marginLeft">16dp</item>
+	    <item name="android:layout_marginRight">16dp</item>
+	    <item name="android:layout_marginTop">16dp</item>
+	    <item name="android:paddingBottom">8dp</item>
+	    <item name="android:paddingTop">8dp</item>
+	    <item name="android:selectAllOnFocus">true</item>
+	    <item name="android:singleLine">true</item>
+	    <item name="android:textSize">12sp</item>
+	    <item name="android:gravity">center</item>
+	    <item name="android:background">@drawable/edit_select</item>
+	</style>
 </resources>
