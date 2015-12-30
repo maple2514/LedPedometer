@@ -6,22 +6,22 @@
     android:background="#d0d6e0"
     android:orientation="vertical" >
 
-     <TextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:gravity="center"
         android:layout_marginTop="56dip"
-        android:textSize="34sp"
         android:background="#d0d6e0"
-        android:textColor="#00a7f7"
         android:fontFamily=""
-        android:text="新 用 户" />
-     
+        android:gravity="center"
+        android:text="新 用 户"
+        android:textColor="#00a7f7"
+        android:textSize="34sp" />
+
     <EditText
-        android:layout_marginTop="24dp"
         android:id="@+id/et_register_phone"
         style="@style/EditTextStyle"
+        android:layout_marginTop="24dp"
         android:hint="手机号码"
         android:inputType="phone" />
 
@@ -29,7 +29,7 @@
         android:id="@+id/et_register_pass"
         style="@style/EditTextStyle"
         android:layout_marginTop="0dp"
-        android:hint="密码/6到18个字母或数字和符号-，_"
+        android:hint="密码/6到18个字母或数字和符号- _"
         android:inputType="textPassword" />
 
     <EditText
@@ -38,42 +38,43 @@
         android:layout_marginTop="0dp"
         android:hint="确认密码"
         android:inputType="textPassword" />
-<LinearLayout 
-    android:layout_marginTop="16dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    
-    <EditText
-        android:id="@+id/et_register_vetified_code"
-        style="@style/EditTextStyle"
-        android:hint="验证码"
-        android:inputType="number"
-        android:layout_marginRight="0dp"
-        android:layout_width="wrap_content" 
-        android:layout_weight="2"/>
-    <Button
-        android:layout_marginLeft="0dp"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:id="@+id/bt_register_vetified_code"
-        android:text="发送验证码"
-        android:textSize="12sp"
-        android:background="#d0d6e0"
-        android:textColor="@android:color/white"
-        style="@style/ButtonStyle"
-        android:layout_weight="1"/>
-</LinearLayout>
- <Button
-        
-        android:layout_height="wrap_content"
+
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/et_register_vetified_code"
+            style="@style/EditTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1"
+            android:hint="验证码"
+             />
+
+        <Button
+            android:id="@+id/bt_register_vetified_code"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="0dp"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <Button
         android:id="@+id/bt_register_commit"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"
         android:layout_marginRight="24dp"
-        android:text="注  册"
         android:background="#00a7f7"
-        android:textColor="@android:color/white"
-        style="@style/ButtonStyle"
-       />
+        android:text="注  册"
+        android:textColor="@android:color/white" />
+
 </LinearLayout>

@@ -25,6 +25,7 @@
         </activity>
         <activity android:name="com.nju.run.LoginActivity"></activity>
         <activity android:name="com.nju.run.RegisterNewUser"></activity>
+        <activity android:name="com.nju.run.HomeActivity"></activity>
     </application>
 
 </manifest>

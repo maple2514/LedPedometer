@@ -13,18 +13,20 @@
 package com.nju.run;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.telephony.SmsManager;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.nju.run.model.User;
+import com.nju.run.utils.VertifiedCodeUtils;
 
 public class RegisterNewUser extends Activity {
 
@@ -44,28 +46,20 @@ public class RegisterNewUser extends Activity {
 	private boolean isPhoneEmpty = true;
 	// 判断pass输入框是否有内容
 	private boolean isPassEmpty = true;
-	// 验证码
+	// 确认密码框
+	protected boolean isConPassEmpty = true;
+	// 验证码输入框
+	protected boolean isVertifiedEmpty = true;
+	// 正确的验证码
 	protected String vertifiedCode;
 	// 电话号码
 	protected String phoneNumber;
-	private int count = 60;
-	//验证码按钮是否有效
-	protected boolean isBtnVetifiedUnEnalbe =false;
-	protected Handler handler=new Handler(){
-		@Override
-		public void handleMessage(Message msg) {
-			// 循环处理 等待验证码失效时间美妙减1
-			if(count>0){
-				btnVetified.setText("重新发送("+count+"s)");
-				count--;
-				handler.sendEmptyMessageDelayed(0, 1000);
-			}else{
-				btnVetified.setEnabled(true);
-				btnVetified.setText("发送验证码");
-			}
-		}
-		
-	};
+	//密码
+	private String passWord;
+	//确认密码
+	private String conPassWord;
+	//输入的验证码
+	private String inputVertifiedCode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +71,12 @@ public class RegisterNewUser extends Activity {
 		etConPass = (EditText) findViewById(R.id.et_register_confirm_pass);
 		etVetified = (EditText) findViewById(R.id.et_register_vetified_code);
 		btnVetified = (Button) findViewById(R.id.bt_register_vetified_code);
+		// 设置验证码
+		btnVetified.setBackground(new BitmapDrawable(VertifiedCodeUtils
+				.getInstance().createBitmap()));
 		btnCommit = (Button) findViewById(R.id.bt_register_commit);
-		btnCommit.setEnabled(false);
+		// 失效注册按钮
+		unEnableButton();
 		// 监听输入号码框
 		etPhone.addTextChangedListener(new TextWatcher() {
 
@@ -135,73 +133,173 @@ public class RegisterNewUser extends Activity {
 				checkEditTextIsEmpty(s);
 			}
 		});
-		btnVetified.setOnClickListener(new OnClickListener() {
+		// 确认密码框
+		etConPass.addTextChangedListener(new TextWatcher() {
 
 			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+				if (s.toString().length() == 0) {
+					unEnableButton();
+				} else {
+					isConPassEmpty = false;
+				}
+				checkIsEnableButton();
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				checkEditTextIsEmpty(s);
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				checkEditTextIsEmpty(s);
+			}
+		});
+		// 验证码输入框
+		etVetified.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+				if (s.toString().length() == 0) {
+					unEnableButton();
+				} else {
+					isVertifiedEmpty = false;
+				}
+				checkIsEnableButton();
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				checkEditTextIsEmpty(s);
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				checkEditTextIsEmpty(s);
+			}
+		});
+		btnVetified.setOnClickListener(new OnClickListener() {
+			@Override
 			public void onClick(View v) {
-				// 获取验证码
-				vertifiedCode = getVertifiedCode();
-				// 判断是否为手机号码
-				phoneNumber = etPhone.getText().toString().trim();
-				if (isPhone()) {
-					// 发送短信
-					sentVertifiedCodeToPhoneNumber();
-					//使按钮无效
-					if(btnVetified.isEnabled()){
-						btnVetified.setEnabled(false);
-						count = 60;
-						//isBtnVetifiedUnEnalbe =true;
+				btnVetified.setBackground(new BitmapDrawable(VertifiedCodeUtils
+						.getInstance().createBitmap()));
+				System.out.println(VertifiedCodeUtils.getInstance().getCode());
+				vertifiedCode = VertifiedCodeUtils.getInstance().getCode();
+			}
+		});
+		btnCommit.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//判断电话号码格式是否正确
+				if(isPhone()){
+					if(isCorrectPass()){
+						if(isConPassCorrect()){
+							if(isCorrectVertifiedCode()){
+								Toast.makeText(getApplicationContext(), "恭喜注册成功",
+										Toast.LENGTH_SHORT).show();
+								creatUser();
+								enterHome();
+							}
+						}
 					}
-					//开启线程更改状态
-					handler.sendEmptyMessageDelayed(0, 0);
 				}
 			}
 		});
 	}
 
-//	//显示重新发送
-//	protected void updateVertifiedButtonState() {
-//		// TODO Auto-generated method stub
-//		
-//		new Thread(new Runnable() {
-//			int count = 60;
-//			@Override
-//			public void run() {
-//				// TODO Auto-generated method stub
-//				while(count>0){
-//					btnVetified.setText("重新发送("+count+"s)");
-//					SystemClock.sleep(1000);
-//					count--;
-//				}
-//			}
-//		}).start();
-//	}
-
-	// 发送验证码
-	protected void sentVertifiedCodeToPhoneNumber() {
+	/**
+	 * 
+	 */
+	protected void creatUser() {
 		// TODO Auto-generated method stub
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				SmsManager smsManager = SmsManager.getDefault();
-				String content = getResources().getString(R.string.vertifiedCodeContent);
-				content = String.format(content, vertifiedCode);
-				smsManager.sendTextMessage(phoneNumber, // 收件人的号码
-						null, // 短信中心号码
-						content, null, // 如果发送成功, 回调此广播, 通知我们.
-						null); // 当对方接收成功, 回调此广播.
+		User user = User.makeInstance();
+		user.setName(phoneNumber);
+		
+	}
+
+	//进入主界面
+	protected void enterHome() {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(this, HomeActivity.class);
+		startActivity(intent);
+	}
+
+	//判断验证码是否正确
+	protected boolean isCorrectVertifiedCode() {
+		// TODO Auto-generated method stub
+		inputVertifiedCode = etVetified.getText().toString().trim();
+		if(inputVertifiedCode.equalsIgnoreCase(vertifiedCode)){
+			return true;
+		}else{
+			Toast.makeText(getApplicationContext(), "验证码输入错误，请重新输入",
+					Toast.LENGTH_SHORT).show();
+			return false;
+		}
+	}
+
+	//判断验证密码是否和密码一致
+	protected boolean isConPassCorrect() {
+		conPassWord = etConPass.getText().toString().trim();
+		if(passWord.equals(conPassWord)){
+			return true;
+		}else{
+			Toast.makeText(getApplicationContext(), "确认密码输入错误，请重新输入",
+					Toast.LENGTH_SHORT).show();
+			return false;
+		}
+	}
+
+	//判断密码格式是否正确
+	protected boolean isCorrectPass() {
+		passWord = etPass.getText().toString().trim();
+		if(passWord.length()>=6 && passWord.length()<=18){
+			if(checkFormatPass()){
+				return true;
+			}else{
+				Toast.makeText(getApplicationContext(), "密码格式不正确，请重新输入",
+						Toast.LENGTH_SHORT).show();
+				return false;
 			}
-		}).start();
+		}else{
+			Toast.makeText(getApplicationContext(), "密码长度不正确，请重新输入",
+					Toast.LENGTH_SHORT).show();
+			return false;
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	private boolean checkFormatPass() {
+		// TODO Auto-generated method stub
+		for (int i = 0; i < passWord.length(); i++) {
+			if(!(Character.isLetterOrDigit(passWord.charAt(i))||
+					(passWord.charAt(i) == '_')||(passWord.charAt(i) == '-')))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	// 判断是否为电话号码
 	protected boolean isPhone() {
 		// TODO Auto-generated method stub
-		if (TextUtils.isEmpty(phoneNumber)) {
-			Toast.makeText(getApplicationContext(), "手机号码为空，请重新输入",
-					Toast.LENGTH_SHORT).show();
-			return false;
-		} else if ((phoneNumber.matches("^1[34568]\\d{9}$"))
+		phoneNumber = etPhone.getText().toString().trim();
+		if ((phoneNumber.matches("^1[34568]\\d{9}$"))
 				&& (phoneNumber.length() == 11)) {
 			return true;
 		} else {
@@ -209,16 +307,6 @@ public class RegisterNewUser extends Activity {
 					Toast.LENGTH_SHORT).show();
 			return false;
 		}
-	}
-
-	// 随机生成验证码
-	protected String getVertifiedCode() {
-		// TODO Auto-generated method stub
-		String result = "";
-		for (int i = 0; i < 6; i++) {
-			result += (int) (Math.random() * 10);
-		}
-		return null;
 	}
 
 	private void checkEditTextIsEmpty(CharSequence s) {
@@ -229,14 +317,17 @@ public class RegisterNewUser extends Activity {
 
 	// enable button state
 	private void checkIsEnableButton() {
-		if ((!isPhoneEmpty) && (!isPassEmpty)) {
+		if ((!isPhoneEmpty) && (!isPassEmpty) && (!isConPassEmpty)
+				&& (!isVertifiedEmpty)) {
 			btnCommit.setEnabled(true);
+			btnCommit.setTextColor(Color.WHITE);
 		}
 	}
 
 	// unenable button state
 	private void unEnableButton() {
 		if (btnCommit.isEnabled()) {
+			btnCommit.setTextColor(Color.GRAY);
 			btnCommit.setEnabled(false);
 		}
 	}
